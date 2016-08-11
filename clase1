@@ -23,3 +23,4 @@ install.packages("foreign")
 require(foreign)
 #importar la base de datos
 sociodem<-read.dbf("C://Users//SALA-C21//Desktop//SDEMT215.dbf")
+table(sociodem$SEX)
