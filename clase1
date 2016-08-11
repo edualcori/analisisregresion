@@ -18,3 +18,8 @@ table(edad)
 detach(base1.1)
 #Hace un resumen de estadistica descriptiva básica de la base
 summary(base1.1$edad)
+#importar la base de datos se utiliza foreign
+install.packages("foreign")
+require(foreign)
+#importar la base de datos
+sociodem<-read.dbf("C://Users//SALA-C21//Desktop//SDEMT215.dbf")
