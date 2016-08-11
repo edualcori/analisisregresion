@@ -1,0 +1,20 @@
+sample(10000,35)
+help(sample)
+###vamos a crear una pequeña base de datos con cuatro variables###
+#Nombre, edad, sexo,tipo de eduación.
+nombre<-c("sergio","Alan","Betzabeth","Judith","Rodrigo","Eric","Diego","Angel")
+edad<-c(36,20,23,20,21,21,22,21)
+sexo<-c("Masculino","Masculino","Femenino","Femenino","Masculino","Masculino","Masculino","Masculino")
+teduca<-c("pública","pública","pública","pública","privada","pública","pública","pública")
+
+#generar la base a través de una matriz
+base1<-matrix(c(edad,nombre,sexo,teduca))
+#crear una base con data.frame
+base1.1<-data.frame(nombre,edad,sexo,teduca)
+#Vamos a utilizar la función table para conocer las frecuencias de las diferentes variables
+table(base1.1$edad)
+attach(base1.1)
+table(edad)
+detach(base1.1)
+#Hace un resumen de estadistica descriptiva básica de la base
+summary(base1.1$edad)
