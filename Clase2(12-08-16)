@@ -1,0 +1,48 @@
+#limpiar el entorno de trabajo 
+rm(list=ls())
+#ctrl+L limpia la consola
+
+#Definir el directorio raiz de las bases de datos
+setwd("C://Users//SALA-C29//Desktop//Nueva carpeta")
+#sociodem<-read.dbf("C://Users//SALA-C21//Desktop//SDEMT215.dbf") es lo de ayer para importar la base
+#Data.frame es para decir que es una base de datos
+require(foreign)
+SDEMT215<-data.frame(read.dbf("SDEMT215.dbf")) #es para importar la base de otra manera
+#1.1 Frecuencias con datos muestrales sin ponderar
+#Método1
+ #Manera de visualizar mi base de datos
+View(SDEMT215)
+install.packages("questionr")
+require(questionr)
+wtd.table(SDEMT215$POS_OCU)
+#el na.show es para mostrar los valores perdidos 
+wtd.table(SDEMT215$POS_OCU,na.show=TRUE)
+
+#2.1 Frecuencias con datos ponderados.
+#El factor de expansion es para generalizar los datos de la muestra a toda la población.
+#Para que R nos de la poblacion expandida
+wtd.table(SDEMT215$POS_OCU,weights = SDEMT215$FAC,na.show = TRUE)
+#El primer argumento es nuestra variable y el segundo es la ponderación, FAC es la ponderacion en esta base de datos, es el factor
+
+#2.1 Tabulados con datos muestrales (sin ponderar)
+wtd.table(SDEMT215$SEX,SDEMT215$POS_OCU)
+#Método1
+#2.2 Tabulados con datos ponderados
+wtd.table(SDEMT215$SEX,SDEMT215$POS_OCU,weights = SDEMT215$FAC)
+###Ejercicio
+#1)Obtener la frecuencia de la variableclase1(muestral)
+wtd.table(SDEMT215$CLASE1)
+
+#2)Obtener el tabulado de entidad y sexo(muestral y ponderado)
+wtd.table(SDEMT215$ENT,SDEMT215$SEX)
+#Datos expandidos
+wtd.table(SDEMT215$ENT,SDEMT215$SEX,weights = SDEMT215$FAC)
+
+#Etiquetar en otra variable
+#Aqui creamos una nueva variable y la etiquetamos 
+SDEMT215$SEXO<-factor(SDEMT215$SEX,levels = c(1,2),labels = c("HOMBRE","MUJER"))
+wtd.table(SDEMT215$SEXO)
+
+#3.2 Etiquetar en la misma variable
+SDEMT215$POS_OCU<-factor(SDEMT215$POS_OCU,levels = c(1,2,3,4,5),labels =c("Subordinados","Empleadores","Cuenta propia","Sin pago","NE") )
+wtd.table(SDEMT215$POS_OCU)
