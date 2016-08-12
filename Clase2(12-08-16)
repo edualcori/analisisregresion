@@ -46,3 +46,4 @@ wtd.table(SDEMT215$SEXO)
 #3.2 Etiquetar en la misma variable
 SDEMT215$POS_OCU<-factor(SDEMT215$POS_OCU,levels = c(1,2,3,4,5),labels =c("Subordinados","Empleadores","Cuenta propia","Sin pago","NE") )
 wtd.table(SDEMT215$POS_OCU)
+http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/regulares/enoe/doc/fd_c_bas_amp_15ymas.pdf
