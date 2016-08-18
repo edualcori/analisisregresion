@@ -1,0 +1,50 @@
+
+#4.1 Recodificacion de variables numéricas
+#Método 1 Aqu´´´´i creamos una nueva variable
+SDEMT215$EDAD11[as.numeric(SDEMT215$EDA)>=0& as.numeric(SDEMT215$EDA)<=10]<-1
+SDEMT215$EDAD11[as.numeric(SDEMT215$EDA)>=11& as.numeric(SDEMT215$EDA)<=20]<-2
+SDEMT215$EDAD11[as.numeric(SDEMT215$EDA)>=21& as.numeric(SDEMT215$EDA)<=30]<-3
+SDEMT215$EDAD11[as.numeric(SDEMT215$EDA)>=31& as.numeric(SDEMT215$EDA)<=40]<-4
+SDEMT215$EDAD11[as.numeric(SDEMT215$EDA)>=41]<-5
+
+ls(SDEMT215) #Lista de variables que hay en la base
+table(SDEMT215$EDAD11)
+class(SDEMT215$ENT)# eS VARIABLE FACTOR,
+#Para convertir una variable factor en numerico primero hay que convertirla en caracter 
+SDEMT215$ENT<- (as.character(as.numeric(SDEMT215$ENT)))
+#as.numeric es para cambiar la varible de caracter a tipo numérica
+
+
+#Método2 #DEL O AL 10 LLAMALE 1, DEL 11 AL 20 LLAMALE 2 Y ASI SUCESIVAMENTE
+SDEMT215$EDAD111<- ifelse(as.numeric(SDEMT215$EDA)>=0 &as.numeric(SDEMT215$EDA)<=10,1,
+                                     ifelse(as.numeric(SDEMT215$EDA)>=11 &as.numeric(SDEMT215$EDA)<=20,2,
+                                      ifelse(as.numeric(SDEMT215$EDA)>=11 &as.numeric(SDEMT215$EDA)<=30,3,
+                                       ifelse(as.numeric(SDEMT215$EDA)>=31 &as.numeric(SDEMT215$EDA)<=40,4,5))))
+
+ls(SDEMT215)
+table(SDEMT215$EDAD111)
+
+#4.1Recodificación de variables tipo caracter
+class(SDEMT215$R_DEF)#vARIABLE TIPO FACTOR ES LO MISMO DE CARA
+SDEMT215$VALIDO[as.character(SDEMT215$R_DEF)!="00"]<-"Entrevista incompleta"#Cuando la variable R_def sea diferente de 00 le llame entrevista completa pero guardandola en la variable valido
+SDEMT215$VALIDO[as.character(SDEMT215$R_DEF)=="00"]<-"Entrevista completa" #Cuando la variable R_def sea igual a 00 le llame entrevista incompleta pero guardandola en la variable valido
+
+wtd.table(SDEMT215$VALIDO)
+
+#5 Subconjunto de datos 
+
+#5.1 Seleccionando variables de interés
+#Método
+var<-c("R_DEF","LOC","MUN","C_RES")
+newdata1 <- SDEMT215[,var]#eSTAMOS CREANDO UNA NUEVA BASE DE DATOS QUE SE LLAMA NEWDATA Y PEGALE LAS COLUMNAS DE LA VARIABLE QUE ACABAMOS DE CREAR 
+#[FILA,COLUMNA] ENTONCES COMO TENEMOS [,VAR] SOLO NOS PEGA LA COLUMNA
+
+#Seleccionar casos u observaciones
+#Para ello utilizamos la función subset()(subconjunto)
+help(subset)
+mujer<- subset(SDEMT215,SDEMT215$SEX==2)
+table(mujer$SEX)
+
+mujer$CD_A<- as.character(mujer$CD_A)
+mujer<- subset(mujer,mujer$CD_A=="02" | mujer$CD_A=="16")
+table(mujer1$CD_A)
