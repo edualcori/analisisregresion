@@ -1,0 +1,22 @@
+ent<-subset(sociodem,sociodem$ENT==25|sociodem$ENT==32)
+table(ent$ENT)
+#ent1<-subset(ent,ent$ENT==25|ent$ENT==32)
+#table(ent$ENT)
+
+class(ent$ENT)
+
+
+ent$POS[as.numeric(ent$POS_OCU)==1 ]<-"Subordinados y remunerados"
+ent$POS[as.numeric(ent$POS_OCU)==2 ]<-"Empleadores"
+ent$POS[as.numeric(ent$POS_OCU)==3 ]<-"Cuenta propia"
+ent$POS[as.numeric(ent$POS_OCU)==4 ]<-"Sin pago"
+ent$POS[as.numeric(ent$POS_OCU)==5]<-"NE"
+table(ent$POS)
+
+
+tabla1<- subset(sociodem,sociodem$SEX==1 | sociodem$SEX==2)
+table(tabla1$SEX)
+sociodem$VALIDO[as.character(sociodem$ENT)=="25"]<-"SINALOA"
+sociodem$VALIDO[as.character(sociodem$ENT)=="32"]<-"ZACATECAS"
+wtd.table(sociodem$VALIDO)
+
