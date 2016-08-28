@@ -1,25 +1,29 @@
-ent<-subset(sociodem,sociodem$ENT==25|sociodem$ENT==32)
-table(ent$ENT)
-#ent1<-subset(ent,ent$ENT==25|ent$ENT==32)
-#table(ent$ENT)
 
-class(ent$ENT)
+sociodem$POS[as.numeric(sociodem$POS_OCU)==0 ]<-"Subordinados y remunerados" 
+sociodem$POS[as.numeric(sociodem$POS_OCU)==1 ]<-"Empleadores" 
+sociodem$POS[as.numeric(sociodem$POS_OCU)==2 ]<-"Cuenta propia" 
+sociodem$POS[as.numeric(sociodem$POS_OCU)==3 ]<-"Sin pago" 
+sociodem$POS[as.numeric(sociodem$POS_OCU)==4]<-"NE" 
+table(sociodem$POS) 
 
+sociodem$SEXO[as.numeric(sociodem$SEX)==1 ]<-"HOMBRES" 
+sociodem$SEXO[as.numeric(sociodem$SEX)==2 ]<-"MUJERES" 
+table(sociodem$SEXO)
 
-ent$POS[as.numeric(ent$POS_OCU)==1 ]<-"Subordinados y remunerados"
-ent$POS[as.numeric(ent$POS_OCU)==2 ]<-"Empleadores"
-ent$POS[as.numeric(ent$POS_OCU)==3 ]<-"Cuenta propia"
-ent$POS[as.numeric(ent$POS_OCU)==4 ]<-"Sin pago"
-ent$POS[as.numeric(ent$POS_OCU)==5]<-"NE"
-table(ent$POS)
+sociodem$ENTI[as.numeric(sociodem$ENT)==25 ]<-"SINALOA" 
+sociodem$ENTI[as.numeric(sociodem$ENT)==32 ]<-"ZACATECAS" 
+table(sociodem$ENTI)
 
+ tabla1<-data.frame(sociodem$POS,sociodem$SEXO,sociodem$ENTI==32) 
+ table(tabla1)
+ tabla2<-data.frame(sociodem$POS,sociodem$SEXO,sociodem$ENTI==25) 
+ table(tabla2)
 
-tabla1<- subset(sociodem,sociodem$SEX==1 | sociodem$SEX==2)
-table(tabla1$SEX)
-sociodem$VALIDO[as.character(sociodem$ENT)=="25"]<-"SINALOA"
-sociodem$VALIDO[as.character(sociodem$ENT)=="32"]<-"ZACATECAS"
-wtd.table(sociodem$VALIDO)
-require(questionr) 
-table(sociodem$POS_OCU,sociodem$SEX,sociodem$ENT==25) 
-table(sociodem$POS_OCU,sociodem$SEX,sociodem$ENT==32) 
-
+ #Exportar excel
+install.packages("XLConnect") 
+require(XLConnect) 
+wb<-loadWorkbook("practica.xlsx",create=TRUE) 
+createSheet(wb,name = "Tabla de Jalisco y Coahuila") 
+writeWorksheet(wb,tabla,"Tabla de Jalisco y Coahuila",startRow = 2,startCol = 2,header = TRUE) 
+saveWorkbook(wb) 
+ 
