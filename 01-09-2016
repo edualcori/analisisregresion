@@ -1,0 +1,42 @@
+#Hipótesis, queremos comprobar que entre mayor ingreso en la familia hay una
+#mayor estatura en los niños
+estatura<-c(1.2,1.23,1.19,1.32,1.28,1.22,1.17,1.29,1.33,1.15)
+niv<-c(110,130,108,167,156,115,104,138,170,107)
+# EL PRIMER PASO ES HACER EL DIAGRAMA DE DISPERSION
+plot(niv,estatura,pch=1,xlab = "Ingreso económico", ylab = "Estatura",main = "Gráfica de dispersión",col="black")
+#pch es el tipo de punto
+#Primero va la indepentiente, dependiente,pch
+#Podemos ver que si podemos ajustar una recta , con una relación positiva
+#Para calcular la correlación se usa la función cor()
+help(cor)
+#El argumento na.rm=false no considera los datos perdidos(NA)
+#cOR por default usa Pearson si no escogemos un método
+cor(niv,estatura,method = "pearson")
+#Como el resultado es .95 podemos decir que hay una muy alta relación
+#Ahora le aplicaremos una prueba a esa correlación mediante la función cor.test()
+#Para comprobar que en realidad hay relación la prueba de hipótesis es H0=r=0 es que no hay relación
+#r=!0 es que si hay relación
+cor.test(niv,estatura,method = "pearson")
+#Si el p-value es menor a .05 rechazamos la hipótesis nula , con un 95% de confianza
+#como en el ejemplo da -.0000607 , por tanto rechazamos H0 y aceptamos H1 que dice que si hay relación.
+#Ya que confirmamos la correlación aplicamos el modelo
+#Para aplicar el modelo(el modelo es ajustar una recta a nuestros datos)
+#Para ello se usa la función lm(dependiente,independiente)
+mod1<-lm(estatura~niv)
+summary(mod1)
+#Lo que buscamos en los residuales es que sean menores a .05(tres asteriscos) para que sean los suficientemente significativo
+#Los residuales nos generan las diferencias 
+#entre los valores ajustados y los reales
+#Los residuales es la suma entre las distancias entre los puntos y la recta, los promedios
+#por tanto entre menor el residual, mas cerca los puntos de la linea y por tanto un mejor modelo
+#Los coeficientes B0 y B1 son los que dicen estimate
+#Volvemos a graficar nuetro gráfico de dispersion
+
+plot(niv,estatura,pch=1,xlab = "Ingreso económico", ylab = "Estatura",main = "Gráfica de dispersión",col="black")
+#Ahora ponemos la linea ajustada con abline
+abline(mod1)
+names(mod1)
+mod1$coefficients
+#con esto podemos decir que la ecuacion es
+estatura=.932369 + .002341niv
+#La ECUACION ES Y=B0+B1X
