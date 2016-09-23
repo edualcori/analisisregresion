@@ -1,0 +1,18 @@
+rm(list = ls())
+install.packages("foreign")
+require(foreign)
+sdemt216<-data.frame(read.dbf("C://Users//SALA-C29//Desktop//sdemt216.dbf"))
+
+sdemt1<-subset(sdemt216,sdemt216$ENT=="01")
+sdemt1$EDAD<-as.numeric(sdemt1$EDA)
+var<-c("EDAD","INGOCUP")
+sdemt2<-sdemt1[,var]
+sdemt3<-subset(sdemt2,sdemt2$INGOCUP!=0)
+sdemt4<-subset(sdemt3,sdemt3$EDAD>=18)
+sdemt5<-subset(sdemt4,sdemt4$EDAD<=65)
+
+
+
+#Hipótesis 
+plot(sdemt5$EDAD,sdemt5$INGOCUP,pch=2,xlab="Años de escolaridad", ylab = "Ingreso Mensual",main = "Gráfico de Dispersión",col="green")
+cor(sdemt5$EDAD,sdemt5$INGOCUP)
