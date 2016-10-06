@@ -1,0 +1,45 @@
+plot(precio,calidad,method="pearson")
+cor.test(precio,calidad,method = "pearson")
+
+##comparacion de los modelos 
+#Pretendemos seleccionar el mejor subconjunto de variables independientes , en este caso para la aplicacion del modelo de regresion multiple
+#tenemos dos variables, independientes(capacidad, calidad)por lo que se propone comparar 3 modelos con la finalidad de aplicar el principio de parsimonia, conocer variables independientes necesarias 
+#evitar multicolinealidad, es decir. que se tienen muchas variables intentando explicar el modelo, ante estas variables se pueden comparar tres modelos
+#1)precio~capacidad
+#2)precio~calidad 
+#3)precio~calidad+capacidad
+#¿Cómo seleccionamos el mejor modelo?
+#Criterio de informacion de Akaike(AIC)
+#El problema de utilizar R cuadrada para comparar modelos es que al introducir nuevas variables al modelo, esta medida siempre crece.
+#Si estamos diciendo cual de todos los metodos ajusta mejora los datos, el modelocon más variables independientes siempre será el mejor ajustado
+#Por eso se utiliza el AIC, una medida de ajuste que penaliza el modelo por tener mas variables viene definidopor:
+#AIC=(n)(log(SCR/n))+2k
+#SCR=SUMA de cuadrados residuales
+#n es el número de casos en el modelo
+#k=número de variables independientes 
+#El problema es que el unico criterio para el AIC es si el AIC es mayor el mdelo es peor, y si el AIC es menor el modelo es mejor, por tanto esperamos un AIC más pequeño
+#El modelo AIC nos va a ayudar a decidir sobre un modelo
+#El método más recomendable es el método step by step
+#Adentro del step by step hay tres modalidades 
+#1)Forward parte del coeficiente B0 y de ahi va probando variables
+#2) Blackward... R empieza con todas las variables independientes y de ahi estudia si el AIC baja cuando hay cambios de variables
+#3) Both .. Empieza como el forward la difere3ncia es que se realizan test para conocer la variable independiente menos útil
+
+#El método recomendable es el backward porque tiene un efecto represor que permite probar cuando una variable tiene influencia sólo si otra variable se mantiene constante 
+#Vamos a calcular el mo0delo con las dos variables independientes 
+moch<-data.frame(precio,capa,calidad)
+cor(moch,use="everything",method="pearson")
+mod1<-lm(precio~capa+calidad,data=moch)
+summary(mod1)
+
+step(mod1,direction="backward")
+#Aquí podemos ver que el metodo step analizó dos modelos 
+#1)precio~capa+calidad con AIC=83.9
+#2)precio~calidad con un AIC=83.51
+#El estadistico t- value permiete ver cual es la variable que tiene mayor influencia en nuestro modelo
+step(mod1,direction="both")
+#tenemos un resultado igual al de backward por la forma que se construye eeste metodo
+#Ahor con el metodo fe forward
+step(mod1,direction="forward")
+#Este modelo muestra el modelo más completo porque inicia haciendo pruebas con el modelo nulo y solo deja el modelo completo porque es el que mayor AIC muestra
+
