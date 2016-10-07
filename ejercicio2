@@ -1,0 +1,34 @@
+y<-c(25.5, 31.2, 25.9, 38.4, 18.4, 26.7, 26.4,25.9,32,25.2,39.7,35.7,26.5)
+x1<-c(1.74,6.32,6.2,10.52,1.19,1.22,4.10,6.32,4.08,4.15,10.15,1.72,1.70)
+x2<-c(5.30,5.42,8.41,4.63,11.60,5.85,6.62,8.72,4.42,7.60,4.83,3.12,5.3)
+x3<-c(10.8,9.4,7.2,8.5,9.4,9.9,8,9.1,8.7,9.2,9.4,7.6,8.2)
+z<-data.frame(y,x1,x2,x3)
+#0)Analizar gráficos de dispersion y pruebas de correlacion
+plot(z,pch=1,main="Gráfico de Dispersion")
+cor(z,use="everything",method="pearson")
+
+#1)Plantear la ecuacion estimada original
+modelo1<-lm(y~x1+x2+x3)
+summary(modelo1)
+#La ecuacion original es y=39.1767+1.0166x1-1.8608x2-.3461x3
+#2)Analizar anova,r cuadrada,estadistico F mediante p.h
+anova(modelo1)
+#Analizando anova tenemos que el x3 no es lo suficientemente significativos el cual presenta tambien un F menor a 1 y p-value no es menor a .05 entonces pareciera que no es lo suficientemente significativo
+
+#3)Comparar modelos con backward y analizar el modelo que genere la funcion step´siempre que el modelo sea diferente
+step(modelo1,direction="backward")
+#Con backward podemos ver que el modelo se reduce a solo tomar en cuenta x1 y x2 tiene AIC de 20.6 y es menor al de todos los demas modelos la nueva ecuacion seria y=36.089+1.031x1-1.869x2
+modelo2<-modelo1<-lm(y~x1+x2)
+summary(modelo2)
+#Podemos ver que la R ajustada mejoróy el p-value si cumole
+#4)Realizar la prueba de 3 supuestos a este modelo(kolmogorov-smirnov,breusch-pagan y durbin watson)
+install.packages("lmtest")
+require(lmtest)
+bptest(modelo2)
+#El valor de p-value es mayor a .05 por lo tanto no se rechaza la Ho, si hay homogeneidad en las varianzas
+dwtest(modelo2,alternative = "two.sided")
+#Como tenemos una p-value mayor a .05 por lo tanto no se rechaza la hipótesis nula, por tanto podemos concluir que no hay autocorrelacion entre los residuos
+z$ajus<-fitted(modelo2)
+z$resi<-residuals(modelo2)
+z$rstud<-rstudent(modelo2)
+ks.test(z$rstud,"pnorm")
