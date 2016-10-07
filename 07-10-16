@@ -1,0 +1,20 @@
+# Por tanto de acuerdo a step Backward el mejor modelo es el de precio calidad, ahora aplicaremos los supuestos a ese modelo
+mod2<-lm(precio~calidad,data=moch)
+##Aplicar los supuestos para ver si tenemos un buen modelo
+moch$ajus<-fitted(mod2)
+moch$resi<-residuals(mod2)
+moch$rstud<-rstudent(mod2)
+# Ahora probamos los supuestos de normalidad
+#NORMALIDAD
+install.packages("lmtest")
+require(lmtest)
+ks.test(moch$rstud,"pnorm")
+#Histograma
+hist(moch$rstud,xlab="residuals",main="Hist Residuales")
+#El p-value para el contraste de normalidad es mayor que .05(p=.9719) y ademas el histograma se parece a una distribucion normal(curva en forma de campana)entonces no hay problemas de normalidad 
+
+#Homogeneidad de las varianzas 
+bptest(mod2,studentize=FALSE,data=moch)
+#Significancia p=.4154 mayor de .05 por lo que podemos decir que la varianza es constante a lo largo de la muestra
+dwtest(mod2,alternative="two.sided",data=moch)
+#Aceptamos la hipotesis nula de que no existe correlacion entre los residuos con un p-value superior a .05 pvalue=.2976
