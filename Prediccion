@@ -30,3 +30,13 @@ install.packages("car")
 require (car)
 vif (mbolsa)
 #El resultado esta entre 1< y <5 por tanto 
+
+#Tarea en equipo
+#De Hermosillo 
+#Con la base de la SDEMT de la ENOE 2016 2do trimestre
+#Aplicar un modelo con las siguientes variables
+#dependiente=ingocup
+## independiente= edad,sexo,hrsocup,años escolaridad
+##### restricciones de la poblacion
+#de 15 a 65 años , ingreso entre 1 y 30000. asalariados o subordinados
+#En la base que hagan el modelo sin NA
