@@ -1,0 +1,32 @@
+bolsa<-data.frame(estrellas,operacion,uso,gama)
+inter <- seq(min(bolsa$uso), max(bolsa$uso), length = length(bolsa$uso))#ponemos un intervalo para que no se disparen los valores de uso y que este entre los valores que ya conocemos de uso, no mayores ni menoder
+
+bolpred <- data.frame(gama = 2 , operacion = 2, uso = inter)#Las variables que no queremos predecir le damos un valor fijo, en este caso gama =2 y operación=2, quiero ver cuantas estrellas tiene el corredor cuando uso este en el intervalo anterior y gama y operacion sea igual a 2 
+predi1 <- predict(modmo, bolpred, interval = "prediction", se.fit = TRUE, data = bolsa)
+head(predi1$fit)
+
+#fit      lwr      upr
+# 2.103009 1.327835 2.878183 cuando y gorro sea 2.10 la variable uso estará entre 1.3278 y 2.8781
+#2.132452 1.370878 2.894026
+# 2.161894 1.406410 2.917378
+# 2.191337 1.434252 2.948422
+# 2.220780 1.454450 2.987109
+# 2.250222 1.467276 3.033169
+
+### detectar multicolinealidad en el modelo... 
+#La multicolinealidad es para ver si hay dos variables independientes que explican lo mismo
+## cuando un modelo tiene multicolinealidad en un MRM es cuando una var independiente 
+## es combinación lineal de otra var indep ... es decir la multicolinealidad existe en un mrm 
+## si hay fuerte correlación entre 2 o mas var indep ... esto es cuando tengamos un coef de 
+## correlacion sea 1 
+## para detectar esta colinealidad se estima el factor de inflación de la varianza  (FIV) 
+## este factor se calcula con R  a traves de la funcion vif().
+## para este calculo se recomiendan estos rangos 
+## FIV	Estado de los predictores
+## FIV = 1	No correlacionados
+##1 < FIV < 5	Moderadamente correlacionados
+##FIV > 5 < 10	Altamente correlacionados
+install.packages("car")
+require (car)
+vif (mbolsa)
+#El resultado esta entre 1< y <5 por tanto 
