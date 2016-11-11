@@ -1,0 +1,24 @@
+install.packages("questionr")
+require(questionr)
+vivienda<-read.dbf("C:\\Users\\8\\Desktop\\uno.dbf")
+ss<-read.dbf("C:\\Users\\8\\Desktop\\tres.dbf")
+trabajo<-read.dbf("C:\\Users\\8\\Desktop\\cuatro.dbf")
+
+folio<-paste(vivienda$folioviv,vivienda$foliohog,vivienda$numren)
+
+#creamos una nueva base en la que insertemos la variable folio para poder relacionar las variables
+x2<-data.frame(vivienda,folio)
+#Para concatenar una base se crea una variable en la que pegue todas aquellas variables comunes a todas las tablas de las bases
+folio<-paste(ss$folioviv,ss$foliohog,ss$numren)
+
+#creamos una nueva base en la que insertemos la variable folio para poder relacionar las variables
+x<-data.frame(ss,folio)
+#Para ver solo una variable de la base de datos
+x$folio
+
+folio<-paste(trabajo$folioviv,trabajo$foliohog,trabajo$numren)
+x1<-data.frame(trabajo,folio)
+total<-merge(x,x1,by="folio",all.x = TRUE)
+enightotal<-merge(total,x2,by="folio",all.x=TRUE)
+require(questionr)
+wtd.table(enightotal$segsoc,enightotal$contrato,enightotal$factor_vi)
