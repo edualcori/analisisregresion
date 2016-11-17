@@ -1,0 +1,60 @@
+rural<-data.frame(read.spss("C:\\Users\\SALA-C29\\Desktop\\rural.sav"))
+#cuadro con población de 5 a 17 de zonas rurales
+#Tamaño de muestra
+#Ocupados
+#%desocupados
+#Dividir los ocupados en 5 a 9,10 a 13,14 a 17,total
+require(questionr)
+
+wtd.table(rural$sex,weights = rural$fac_mti)
+#E total de población es hombres 4061217 y mujeres 3800117
+wtd.table(rural$eda,rural$sex)
+#El tamaño de la muestra es hombres 9302 y mujeres 8798 ,por tanto hay 18100 en la muestra
+wtd.table(rural$clase2==1,rural$sex,weights = rural$fac_mti, na.rm=TRUE,na.show = FALSE)
+#El total de hombres ocupados es 622492 y mujeres ocupadas es 204970 con factor de expansión
+wtd.table(rural$clase2==1,rural$sex, na.rm=TRUE,na.show = FALSE)
+#sin expandir hombres ocupados 1414 y mujeres 474 
+### % ocupados
+wtd.table(rural$clase2==1,rural$sex==1,weights = rural$fac_mti)*(1/7861334)
+#             hombres    mujeres
+#NO OCUPADO 0.43742258 0.45732022
+#OCUPADO    0.07918402 0.02607318
+
+rural1<-subset(rural,rural$clase2==1)
+table(rural1$eda)
+rural1$EDAD1[as.numeric(rural1$eda)>=5& as.numeric(rural1$eda)<=9]<-1
+rural1$EDAD1[as.numeric(rural1$eda)>=10& as.numeric(rural1$eda)<=13]<-2
+rural1$EDAD1[as.numeric(rural1$eda)>=14& as.numeric(rural1$eda)<=17]<-3
+table(rural1$EDAD1)
+#Hay 379 personas ocupadas entre la edad de 10 y 13 años y 1509 ocupados entre los 14 y 17 años.
+#Por lo tanto hay 1888 niños ocupados
+wtd.table(rural1$EDAD1,weights = rural1$fac_mti)
+#Expandido los ocupados en el grupo 2 son 158695 y en el grupo 3 668167
+wtd.table(rural1$asis,rural1$sex,weights = rural1$fac_mti)
+#Hombres: asisten 335572 y no asisten 286920
+#Mujeres: asisten 107060, no asisten 97910
+#          hombres mujeres
+#Asiste     335572  107060
+#No Asiste  286920   97910
+# el total que asisten
+
+wtd.table(rural1$tam_hog,rural1$sex,weights = rural1$fac_mti)
+
+#                    hombres mujeres
+#1 a 3 integrantes    55181   25618
+#4 a 5 integrantes   149312   44721
+#6 a 7 intengrantes   65844   21472
+#8 y más              35190    8830
+
+wtd.table(rural1$tam_hog,weights = rural1$fac_mti)
+#  1 a 3 integrantes   4 a 5 integrantes   6 a 7 intengrantes      8 y más 
+#       80799             194033              87316                 44020 
+
+#####sexo del jefe del hogar
+wtd.table(rural1$sex_jefe)
+#Hombre  Mujer 
+# 754    181
+wtd.table(rural1$sex_jefe,weights = rural1$fac_mti)
+#Hombre  Mujer 
+#327237  78931
+
