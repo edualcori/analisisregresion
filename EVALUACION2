@@ -1,0 +1,61 @@
+wtd.table(rural1$clase2,rural1$EDAD1)
+require(questionr)
+rural1<-subset(rural,rural$c_ocu=='ocupado')
+rural1$eda1[as.numeric(rural1$eda)>=5& as.numeric(rural1$eda)<=9]<-1
+rural1$eda1[as.numeric(rural1$eda)>=10& as.numeric(rural1$eda)<=13]<-2
+rural1$eda1[as.numeric(rural1$eda)>=14& as.numeric(rural1$eda)<=17]<-3
+table(rural1$EDAD1)
+
+
+#Recodificar
+#Nustra variable dependiente es t_per , y las independientes son sex,eda1,asis,sex_jefe,escol_jefe,t_apo1,ocu_jefe
+#t_per~sex+eda1+asis+sex_jefe+escol_jefe+t_apo1+ocu_jefe
+table(rural1$t_per)
+#Tenemos que recodificar la variable t_per en que el 1 sea familiar, el 2 No familiar, el 3 Vuenta propia y el 4 N.E
+
+#NUEVA FORMA DE RECODIFICAR
+install.packages("plyr")
+library(plyr)
+rural1$t_per<-revalue(factor(rural1$t_per),c("4"=NA))
+table(rural1$t_per)
+
+#Revisar que las variables no tengan no especificado o no sabe, si hay, mandarlo a NA
+table(rural1$sex)
+#hombres mujeres 
+#1685     594 
+rural1$escol_jefe<-revalue(factor(rural1$escol_jefe),c("7"=NA))
+table(rural1$escol_jefe)
+#Sin instrucción                          Primaria incompleta 
+#170                                          338 
+#Primaria completa                        Secundaria incompleta 
+#311                                           31 
+#Secundaria completa Algún año de preparatoria, equivalente y más 
+#199                                           81
+table(rural1$t_apo1)
+table(rural1$ocu_jefe)
+table(rural1$asis)
+table(rural1$sex_jefe)
+rural1$ocu_jefe<-revalue(factor(rural1$ocu_jefe),c("7"=NA))
+
+rural1$t_per<-revalue(factor(rural1$t_per),c("1"="Familiar","2"="No familiar","3"="Cuenta Propia"))
+table(rural1$t_per)
+
+rural1$EDAD1<-revalue(factor(rural1$EDAD1),c("1"="5 a 9","2"="10 a 13","3"="14 a 17"))
+table(rural1$EDAD1)
+
+#Vamos a aplicar el modelo de regresion logistica
+library(nnet)
+#Primero se aplica el modelo nulo, que es igualar la variable dependiente a una constante por eso t_per~1
+mod1<-multinom(t_per~1,data=rural1)
+summary(mod1)
+#Este modelo da un AIC DE 3219
+modfin<-multinom(t_per~sex+eda1+asis+sex_jefe+escol_jefe+t_apo1+ocu_jefe,data = rural1)
+g<-summary(modfin,Wald=T)
+#Este da un AIC=1479.488, por lo tanto el AIC menor es mejor
+print(g)
+#Como lo anterior nos da una tabla muy grande, con muchos datos, con la paqueteria stargazer se extrae sólo lo importante de nuestro modelo
+install.packages("stargazer")
+library(stargazer)
+s<-stargazer(modfin,type = 'htlm',title = "coefficients",summary = T)
+stargazer(modfin,type = 'text',title = "mlogit",digits = 2,out = "C:\\Users\\SALA-C29\\Desktop\\modelo.txt")
+#Lo que sale entre paréntesis es el error estándar
