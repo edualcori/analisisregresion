@@ -1,0 +1,46 @@
+install.packages("xlsx")
+require(readxl)
+datos<-read_excel("C://Users//Sala-F17//Desktop//base.xlsx")
+
+#Pronósticos con regesión
+
+
+consuingreso.ts<-ts(datos)
+
+View(consuingreso.ts)
+
+plot(consuingreso.ts)
+
+regresion<-tslm(consumo~ingresos,data =consuingreso.ts )#consumo(y)~ìngreso(x)
+
+summary(regresion)
+
+
+#Pronósticos basados en escenarios, aumentar o disminuir un porcentaje
+
+pronosticos.1p<-forecast(regresion,newdata = data.frame(ingresos=c(-1,1)))#promosticos de -1 y +1 %
+summary(pronosticos.1p)
+plot(pronosticos.1p,ylab = "Y",xlab = "t")
+
+#Pronósticos lineales
+
+toneladas<-read_excel("C://Users//Sala-F17//Desktop//toneladas.xlsx")
+
+#Un pronostico lineal es para cuando encontramos tendencia en la serie de tiempo (muy marcada)
+
+toneladas.ts<-ts(toneladas)
+
+plot(toneladas.ts,ylab="toneladas",xlab="tiempo")#Toneladas de azucar que emplea cocacola para producir
+
+pronosticos.lin<-tslm(toneladas.ts~trend)#Donde la variable predictora es la tendencia
+#Se hace trendcycle cuando frecuencia es anual
+
+pronosticos.lin1<-forecast(pronosticos.lin,h=15,level=c(80,95))
+summary(pronosticos.lin1)
+
+plot(pronosticos.lin1,ylab="Toneladas de azucar",xlab = "Periodo")
+
+lines(fitted(pronosticos.lin),col="red")
+
+
+multiple<-read_excel("C://Users//Sala-F17//Desktop//multiple.xlsx")
