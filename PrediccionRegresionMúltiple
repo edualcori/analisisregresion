@@ -1,0 +1,39 @@
+multiple<-read_excel("C://Users//Sala-F17//Desktop//multiple.xlsx")
+
+windows()
+pairs(multiple[,(1:5)])#Da la relación de todas las variables, que tan correlacionasas estan 
+
+multiple.log<-data.frame(indice=multiple$indice,
+                         log.ahorro=log(multiple$ahorro+1),#indice=y, como hay ceros hacemos log(x+1)
+                         log.ingreso=log(multiple$ingreso+1),
+                         log.bienes=log(multiple$bienes+1),
+                         log.servicios=log(multiple$servicios+1))
+
+pairs(multiple.log[,(1:5)])
+
+#Para el modelo de regresión
+
+estimado<-lm(indice~log.ahorro+log.ingreso+log.bienes+log.servicios,data=multiple.log)
+
+estimado<-step(lm(indice~log.ahorro+log.ingreso+log.bienes+log.servicios,data=multiple.log))
+summary(estimado)
+#Sale que servicios es el menos significativa
+
+#Modelo nulo: Solo con el intercetpo
+#Modelo saturado: el que tiene todas las variables predictoras que expliquen el modelo
+###########
+plot(fitted(estimado),multiple.log$indice,ylab="Indice",xlab = "Indice predicho")#
+
+#Residuos predictores
+estimado<-lm(indice~log.ahorro+log.ingreso+log.bienes+log.servicios,data=multiple.log)
+
+
+par(mfrow=c(2,2))
+plot(multiple.log$log.ahorro,residuals(estimado),xlab = "Log(ahorros)")
+plot(multiple.log$log.ingreso,residuals(estimado),xlab = "Log(ingreso)")
+plot(multiple.log$log.bienes,residuals(estimado),xlab = "Log(bienes)")
+plot(multiple.log$log.servicios,residuals(estimado),xlab = "Log(servicios)")
+
+
+
+#Estos gráficos de residuos vs valores predichos no deben tener un patron para que sea un buen modelo de regresión
