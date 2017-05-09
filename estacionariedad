@@ -1,0 +1,104 @@
+#################################################################################
+install.packages("fpp")
+library(fpp)
+
+library(readxl)
+
+huelgas <- read_excel("C://Users//Sala-F17//Desktop//huelgas.xlsx")
+huelgas.ts <- ts(huelgas)
+
+
+ventas <- read_excel("C://Users//Sala-F17//Desktop//ventas2.xlsx")
+ventas.ts <- ts(ventas)
+
+trigo <- read_excel("C://Users//Sala-F17//Desktop//trigo.xlsx")
+trigo.ts <- ts(trigo)
+
+ganado <- read_excel("C://Users//Sala-F17//Desktop//ganado.xlsx")
+ganado.ts <- ts(ganado)
+
+otros <- read_excel("C://Users//Sala-F17//Desktop//otros.xlsx")
+otros.ts <- ts(otros)
+
+cerveza <- read_excel("C://Users//Sala-F17//Desktop//cerveza.xlsx")
+cerveza.ts <- ts(cerveza)
+
+electricidad <- read_excel("C://Users//Sala-F17//Desktop//electricidad.xlsx")
+electricidad.ts <- ts(electricidad)
+
+petroleo <- read_excel("C://Users//Sala-F17//Desktop//petroleo.xlsx")
+petroleo.ts <- ts(petroleo)
+
+rates <- read_excel("C://Users//Sala-F17//Desktop//rates.xlsx")
+rates.ts <- ts(rates)
+
+windows()
+par(mfrow=c(3,3))
+plot(huelgas.ts)
+plot(ventas.ts, col="red")
+plot(trigo.ts, col="green")
+plot(ganado.ts, col="blue")
+plot(otros.ts, col="brown")
+plot(cerveza.ts, col="purple")
+plot(electricidad.ts, col="darkgoldenrod1")
+plot(rates.ts, col="lightsalmon2")
+plot(petroleo.ts, col="yellow4")
+
+#################################################################################
+indicador <- read_excel("C://Users//Sala-F17//Desktop//indicador.xlsx")
+
+indicador.ts <- ts(indicador, start=c(1975,1), frequency=292)
+windows()
+plot(indicador.ts, col="red")
+
+#Q de Ljung-box. Diferenciación
+Box.test(indicador.ts, lag=25, type="Ljung-Box")
+
+#Scatter
+indfirst <- diff((indicador.ts))
+plot(indicador.ts, indfirst, pch="circle", lty="dotted")
+
+#Diferencias
+indicaacf <- acf(indicador.ts)
+indicadiff <- acf(diff(indicador.ts))
+indicadiff2 <- acf(diff(indicador.ts, lag=2))
+
+plot()
+par(mfrow= c(1,3))
+plot(indicaacf, main="FAC yt")
+plot(indicadiff, main="FAC Primeras diferencias", col="red")
+plot(indicadiff2, main= "FAC Segundas diferencias", col="green")
+
+#Prueba de raiz unitaria
+adf.test(indicador.ts, alternative = "stationary")
+kpss.test(indicador.ts)
+
+
+###
+medica <- read_excel("F://clases//time-series//clases//data//medica.xlsx")
+
+medica.ts <- ts(medica, start=c(1975,1), frequency=292)
+
+par(mfrow=c(2,2))
+plot(medica.ts)
+plot(log(medica.ts))
+plot(diff(log(medica.ts)))
+plot(diff(diff(medica.ts)))
+
+#Prueba estacionariedad: Dickey-Fuller
+adf.test(medica.ts, alternative = "stationary")
+
+kpss.test(medica.ts)
+
+
+#################################################################################
+estacionaria <- read_excel("C://Users//Sala-F17//Desktop//estacionaria.xlsx")
+
+estacionaria.ts <- ts(estacionaria, start=c(2000,1), frequency=12)
+plot(estacionaria.ts, col="4")
+
+acf(estacionaria.ts, lag.max = 25)
+
+list(acf(estacionaria.ts))
+
+#################################################################################
